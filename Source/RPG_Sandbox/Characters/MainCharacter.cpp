@@ -3,6 +3,9 @@
 
 #include "MainCharacter.h"
 
+#include "Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
+
 // Sets default values
 AMainCharacter::AMainCharacter()
 {
@@ -19,6 +22,20 @@ AMainCharacter::AMainCharacter()
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	CameraComponent->SetupAttachment(SpringArmComponent, USpringArmComponent::SocketName);
 	CameraComponent->bUsePawnControlRotation = false; // Rotation based on spring arm, not camera
+
+	// Hardcode capsule component dimensions
+	GetCapsuleComponent()->SetCapsuleSize(44.f, 105.f);
+
+	// Prevents character from rotating with camera (i.e. can swing camera around to see front of character)
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationRoll = false;
+
+	// Configure character movement
+	GetCharacterMovement()->bOrientRotationToMovement = true; // Rotate to face direction of movement
+	GetCharacterMovement()->RotationRate = FRotator(0.f, 540.f, 0.f); // Rotation rate for characters
+	GetCharacterMovement()->JumpZVelocity = 350.f; // Adjusts how much character jumps
+	GetCharacterMovement()->AirControl = 0.2f; // How much character can change direction in air
 
 }
 
