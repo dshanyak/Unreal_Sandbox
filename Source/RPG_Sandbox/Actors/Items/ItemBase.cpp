@@ -42,6 +42,12 @@ void AItemBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if(bRotate)
+	{
+		FRotator Rotation = GetActorRotation();
+		Rotation.Yaw += DeltaTime * RotationSpeed;
+		SetActorRotation(Rotation);
+	}
 }
 
 void AItemBase::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,

@@ -39,6 +39,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Sounds")
 	USoundCue* OverlapSound;
 
+	/** Determines if item should rotate */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Properties")
+	bool bRotate = false;
+
+	/** How quickly item should rotate */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Properties")
+	float RotationSpeed = 45.f;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
