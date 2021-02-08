@@ -6,6 +6,8 @@
 
 #include "Components/SphereComponent.h"
 #include "GameFramework/Actor.h"
+#include "Sound/SoundCue.h"
+
 #include "ItemBase.generated.h"
 
 UCLASS()
@@ -21,6 +23,22 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Item | Collision")
 	USphereComponent* CollisionVolume;
 
+	/** Base mesh component  */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Mesh")
+	UStaticMeshComponent* Mesh;
+
+	/** Idle particle */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Particles")
+	UParticleSystemComponent* IdleParticle;
+
+	/** Overlap particle */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Particles")
+	UParticleSystem* OverlapParticle;
+
+	/** Plays when player overlaps item */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Sounds")
+	USoundCue* OverlapSound;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -32,7 +50,7 @@ public:
 	/** Called when something collides with the CollisionVolume */
 	UFUNCTION()
 	virtual void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult) {}
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 
 	
 	/** Called when something ends collision with CollisionVolume */

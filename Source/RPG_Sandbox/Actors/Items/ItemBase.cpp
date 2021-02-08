@@ -3,6 +3,10 @@
 
 #include "ItemBase.h"
 
+
+#include "Kismet/GameplayStatics.h"
+#include "Particles/ParticleSystemComponent.h"
+
 // Sets default values
 AItemBase::AItemBase()
 {
@@ -13,6 +17,12 @@ AItemBase::AItemBase()
 	
 	CollisionVolume = CreateDefaultSubobject<USphereComponent>(TEXT("CollisionVolume"));
 	RootComponent = CollisionVolume;
+
+	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	Mesh->SetupAttachment(GetRootComponent());
+
+	IdleParticle = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("IdleParticle"));
+	IdleParticle->SetupAttachment(GetRootComponent());
 
 }
 
@@ -32,6 +42,22 @@ void AItemBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AItemBase::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if(OverlapParticle)
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), OverlapParticle, GetActorLocation());
+	}
+
+	if(OverlapSound)
+	{
+		UGameplayStatics::PlaySound2D(this, OverlapSound);
+	}
+
+	Destroy();
 }
 
 
