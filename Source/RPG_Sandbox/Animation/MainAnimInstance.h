@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
+#include "RPG_Sandbox/Characters/MainCharacter.h"
+
 #include "MainAnimInstance.generated.h"
 
 /**
@@ -27,6 +29,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement")
 	APawn* OwnerPawn;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement")
+	AMainCharacter* MainCharacter;
 
 private:
 	//** Called every frame to update variables */

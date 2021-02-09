@@ -13,6 +13,10 @@ void UMainAnimInstance::NativeInitializeAnimation()
 	if(OwnerPawn == nullptr)
 	{
 		OwnerPawn = TryGetPawnOwner();
+		if(OwnerPawn)
+		{
+			MainCharacter = Cast<AMainCharacter>(OwnerPawn);
+		}
 	}
 }
 
@@ -34,6 +38,9 @@ void UMainAnimInstance::UpdateAnimationProperties()
 	// Update bIsInAir
 	bIsFalling = OwnerPawn->GetMovementComponent()->IsFalling();
 	
-	
+	if(MainCharacter == nullptr)
+	{
+		MainCharacter = Cast<AMainCharacter>(OwnerPawn);
+	}
 	
 }

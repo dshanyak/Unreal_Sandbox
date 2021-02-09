@@ -10,6 +10,16 @@
 
 #include "MainCharacter.generated.h"
 
+UENUM(BlueprintType)
+enum class EMovementStatus : uint8
+{
+	EMS_Normal UMETA(DisplayName = "Normal"),
+	EMS_Sprinting UMETA(DisplayName = "Sprinting"),
+
+	EMS_MAX UMETA(DisplayName = "DefaultMax")
+	
+};
+
 UCLASS()
 class RPG_SANDBOX_API AMainCharacter : public ACharacter
 {
@@ -18,6 +28,26 @@ class RPG_SANDBOX_API AMainCharacter : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AMainCharacter();
+
+	/** Movement */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Enums")
+	EMovementStatus MovementStatus;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Running")
+	float RunningSpeed = 650.f;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Running")
+	float SprintingSpeed = 950.f;
+
+	/** Set movement and running speed */
+	void SetMovementStatus(EMovementStatus Status);
+
+	/** Is srpint key pressed */
+	bool bSprintKeyDown = false;
+
+	/** Called when sprint key is pressed */
+	void SprintKeyPressed();
+
+	/** Called when sprint key not pressed */
+	void SprintKeyReleased();
 
 	/** Spring arm components */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
