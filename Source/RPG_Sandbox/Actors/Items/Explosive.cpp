@@ -3,6 +3,8 @@
 
 #include "Explosive.h"
 
+#include "RPG_Sandbox/Characters/MainCharacter.h"
+
 AExplosive::AExplosive()
 {
 	
@@ -13,7 +15,16 @@ void AExplosive::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor
 {
 	Super::OnOverlapBegin(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
 
-	UE_LOG(LogTemp, Error, TEXT("Overlap begin"));
+	// Cast other actor to
+	AMainCharacter* Player = nullptr;
+	if(OtherActor)
+	{
+		Player = Cast<AMainCharacter>(OtherActor);
+	}
+	if(!Player) return;
+
+	// Apply damage to player
+	Player->DecrementHealth(Damage);
 	
 }
 
@@ -22,7 +33,7 @@ void AExplosive::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* 
 {
 	Super::OnOverlapEnd(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex);
 
-	UE_LOG(LogTemp, Error, TEXT("Overlap end"));
+	
 }
 
 

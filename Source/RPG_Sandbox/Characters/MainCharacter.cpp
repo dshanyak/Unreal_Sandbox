@@ -114,3 +114,20 @@ void AMainCharacter::LookUpAtRate(float Rate)
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 }
 
+void AMainCharacter::DecrementHealth(float Amount)
+{
+	// Apply damage
+	Health -= Amount;
+
+	// Check if character died
+	if(Health <= 0.f)
+	{
+		
+		HandleDeath();
+	}
+}
+
+void AMainCharacter::HandleDeath()
+{
+	
+}

@@ -17,6 +17,10 @@ class RPG_SANDBOX_API AExplosive : public AItemBase
 public:
 	AExplosive();
 
+	/** Damage dealt by explosive */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
+	float Damage = 15.f;
+
 protected:
 
 public:

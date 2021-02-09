@@ -3,6 +3,8 @@
 
 #include "Pickup.h"
 
+#include "RPG_Sandbox/Characters/MainCharacter.h"
+
 APickup::APickup()
 {
 	
@@ -13,7 +15,16 @@ void APickup::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* O
 {
 	Super::OnOverlapBegin(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
 
-	UE_LOG(LogTemp, Error, TEXT("Overlap Begin"));
+	// Cast other actor to
+	AMainCharacter* Player = nullptr;
+	if(OtherActor)
+	{
+		Player = Cast<AMainCharacter>(OtherActor);
+	}
+	if(!Player) return;
+
+	// Add coins to player's inventory
+	Player->Coins += 1;
 	
 }
 
@@ -21,7 +32,5 @@ void APickup::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 	int32 OtherBodyIndex)
 {
 	Super::OnOverlapEnd(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex);
-
-	UE_LOG(LogTemp, Error, TEXT("Overlap End"));
 	
 }

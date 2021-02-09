@@ -50,6 +50,9 @@ public:
 	float Stamina = 120.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Stats")
 	int32 Coins = 0;
+
+	void DecrementHealth(float Amount);
+	void HandleDeath();
 	
 protected:
 	// Called when the game starts or when spawned
