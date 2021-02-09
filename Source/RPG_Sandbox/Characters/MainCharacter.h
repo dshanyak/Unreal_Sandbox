@@ -13,11 +13,22 @@
 UENUM(BlueprintType)
 enum class EMovementStatus : uint8
 {
-	EMS_Normal UMETA(DisplayName = "Normal"),
-	EMS_Sprinting UMETA(DisplayName = "Sprinting"),
+	EMS_Normal		UMETA(DisplayName = "Normal"),
+	EMS_Sprinting	UMETA(DisplayName = "Sprinting"),
 
-	EMS_MAX UMETA(DisplayName = "DefaultMax")
+	EMS_MAX			UMETA(DisplayName = "DefaultMax")
 	
+};
+
+UENUM(BlueprintType)
+enum class EStaminaStatus : uint8
+{
+	ESS_Normal				UMETA(DisplayName = "Normal"),
+	ESS_BelowMinimum		UMETA(DisplayName = "BelowMinimum"),
+	ESS_Exhausted			UMETA(DisplayName = "Exhausted"),
+	ESS_ExhaustedRecovering	UMETA(DisplayName = "ExhaustedRecovering"),
+
+	ESS_MAX					UMETA(DisplayName = "DefaultMax")
 };
 
 UCLASS()
@@ -28,6 +39,25 @@ class RPG_SANDBOX_API AMainCharacter : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AMainCharacter();
+
+	/** Stamina */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Enums")
+	EStaminaStatus StaminaStatus;
+
+	/** Rate at which stamina depleats */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stamina")
+	float StaminaDrainRate = 25.f;
+
+	/** Minimum stamina before being exhausted */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stamina")
+	float MinStamina = 50.f;
+
+	/** Set StaminaStatus */
+	FORCEINLINE void SetStaminaStatus(EStaminaStatus Status) {StaminaStatus = Status;}
+
+	/** Called in Tick to update/check sprinting/stamina status */
+	UFUNCTION()
+	void TickHandleStaminaAndSprinting(float DeltaTime);
 
 	/** Movement */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Enums")

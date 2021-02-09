@@ -37,6 +37,10 @@ AMainCharacter::AMainCharacter()
 	GetCharacterMovement()->JumpZVelocity = 350.f; // Adjusts how much character jumps
 	GetCharacterMovement()->AirControl = 0.2f; // How much character can change direction in air
 
+	// Set Enums
+	MovementStatus = EMovementStatus::EMS_Normal;
+	StaminaStatus = EStaminaStatus::ESS_Normal;
+
 }
 
 // Called when the game starts or when spawned
@@ -51,6 +55,8 @@ void AMainCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	TickHandleStaminaAndSprinting(DeltaTime);
+	
 }
 
 // Called to bind functionality to input
@@ -134,6 +140,63 @@ void AMainCharacter::HandleDeath()
 	
 }
 
+void AMainCharacter::TickHandleStaminaAndSprinting(float DeltaTime)
+{
+	const float DeltaStamina = StaminaDrainRate * DeltaTime;
+
+	switch (StaminaStatus)
+	{
+	case EStaminaStatus::ESS_Normal:
+		if(bSprintKeyDown)
+		{
+			Stamina = FMath::Clamp(Stamina - DeltaStamina, 0.f, MaxStamina);
+			if(Stamina <= MinStamina) SetStaminaStatus(EStaminaStatus::ESS_BelowMinimum);
+			if(Stamina <= 0.f) SetStaminaStatus(EStaminaStatus::ESS_Exhausted);
+			SetMovementStatus(EMovementStatus::EMS_Sprinting);
+		}
+		else // Sprint key up
+			{
+			Stamina = FMath::Clamp(Stamina + DeltaStamina, 0.f, MaxStamina);
+			SetMovementStatus(EMovementStatus::EMS_Normal);
+			}
+		break;
+	case EStaminaStatus::ESS_BelowMinimum:
+		if(bSprintKeyDown)
+		{
+			Stamina = FMath::Clamp(Stamina - DeltaStamina, 0.f, MaxStamina);
+			if(Stamina <= 0.f) SetStaminaStatus(EStaminaStatus::ESS_Exhausted);
+			SetMovementStatus(EMovementStatus::EMS_Sprinting);
+		}
+		else // Sprint key up
+		{
+			Stamina = FMath::Clamp(Stamina + DeltaStamina, 0.f, MaxStamina);
+			if(Stamina > MinStamina) SetStaminaStatus(EStaminaStatus::ESS_Normal);
+			SetMovementStatus(EMovementStatus::EMS_Normal);
+        }
+		break;
+	case EStaminaStatus::ESS_Exhausted:
+		if(bSprintKeyDown)
+		{
+			Stamina = 0.f;
+			SetMovementStatus(EMovementStatus::EMS_Normal);
+		}
+		else // Sprint key up
+		{
+			Stamina = FMath::Clamp(Stamina += DeltaStamina, 0.f, MaxStamina);
+			SetStaminaStatus(EStaminaStatus::ESS_ExhaustedRecovering);
+			SetMovementStatus(EMovementStatus::EMS_Normal);
+		}
+		break;
+	case EStaminaStatus::ESS_ExhaustedRecovering:
+		Stamina = FMath::Clamp(Stamina + DeltaStamina, 0.f, MaxStamina);
+		if(Stamina >= MaxStamina) SetStaminaStatus(EStaminaStatus::ESS_Normal);
+		SetMovementStatus(EMovementStatus::EMS_Normal);
+		break;
+	default:
+		;
+	}
+}
+
 void AMainCharacter::SetMovementStatus(EMovementStatus Status)
 {
 	MovementStatus = Status;
@@ -150,11 +213,11 @@ void AMainCharacter::SetMovementStatus(EMovementStatus Status)
 void AMainCharacter::SprintKeyPressed()
 {
 	bSprintKeyDown = true;
-	SetMovementStatus(EMovementStatus::EMS_Sprinting);
+	// SetMovementStatus(EMovementStatus::EMS_Sprinting);
 }
 
 void AMainCharacter::SprintKeyReleased()
 {
 	bSprintKeyDown = false;
-	SetMovementStatus(EMovementStatus::EMS_Normal);
+	// SetMovementStatus(EMovementStatus::EMS_Normal);
 }
