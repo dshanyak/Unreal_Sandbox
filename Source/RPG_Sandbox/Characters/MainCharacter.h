@@ -33,6 +33,24 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Camera")
 	float BaseLookUpRate = 65.f;
 
+	/**
+	 *
+	 * Player Stats
+	 *
+	 *
+	*/
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Stats")
+	float MaxHealth = 100.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Stats")
+	float Health = 65.f;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Stats")
+	float MaxStamina = 350.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Stats")
+	float Stamina = 120.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Stats")
+	int32 Coins = 0;
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
