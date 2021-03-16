@@ -232,11 +232,11 @@ void AMainCharacter::SetMovementStatus(EMovementStatus Status)
 void AMainCharacter::SprintKeyPressed()
 {
 	bSprintKeyDown = true;
-	// SetMovementStatus(EMovementStatus::EMS_Sprinting);
+	SetMovementStatus(EMovementStatus::EMS_Sprinting);
 }
 
 void AMainCharacter::SprintKeyReleased()
 {
 	bSprintKeyDown = false;
-	// SetMovementStatus(EMovementStatus::EMS_Normal);
+	SetMovementStatus(EMovementStatus::EMS_Normal);
 }
