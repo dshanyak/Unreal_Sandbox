@@ -54,16 +54,11 @@ void AItemBase::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor*
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if(OverlapParticle)
-	{
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), OverlapParticle, GetActorLocation());
-	}
 
 	if(OverlapSound)
-	{
 		UGameplayStatics::PlaySound2D(this, OverlapSound);
-	}
 
-	Destroy();
 }
 
 

@@ -25,6 +25,8 @@ void APickup::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* O
 
 	// Add coins to player's inventory
 	Player->Coins += 1;
+
+	Destroy();
 	
 }
 

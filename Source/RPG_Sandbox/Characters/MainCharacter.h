@@ -7,6 +7,8 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "RPG_Sandbox/Actors/Items/Weapon.h"
+
 
 #include "MainCharacter.generated.h"
 
@@ -39,6 +41,14 @@ class RPG_SANDBOX_API AMainCharacter : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AMainCharacter();
+
+	/** Weapon wielded by character */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Items")
+	AWeapon* EquippedWeapon;
+
+	/** Setup equipped weapon */
+	UFUNCTION(BlueprintCallable)
+	void SetEquippedWeapon(AWeapon* WeaponToSet) { EquippedWeapon = WeaponToSet; }
 
 	/** Stamina */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Enums")
