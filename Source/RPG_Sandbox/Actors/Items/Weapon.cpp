@@ -4,6 +4,9 @@
 #include "Weapon.h"
 
 #include "Engine/SkeletalMeshSocket.h"
+#include "Kismet/GameplayStatics.h"
+#include "Particles/ParticleSystemComponent.h"
+#include "RPG_Sandbox/Characters/MainCharacter.h"
 
 AWeapon::AWeapon()
 {
@@ -17,12 +20,11 @@ void AWeapon::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* O
 {
 	Super::OnOverlapBegin(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
 
+	// Set character's overlapping item to this
 	if(!OtherActor) return;
-
 	AMainCharacter* MainCharacter = Cast<AMainCharacter>(OtherActor);
 	if(!MainCharacter) return;
-
-	Equip(MainCharacter);
+	MainCharacter->SetOverlappedItem(this);
 }
 
 void AWeapon::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
@@ -30,6 +32,11 @@ void AWeapon::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 {
 	Super::OnOverlapEnd(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex);
 
+	// Remove character's overlapping item
+	if(!OtherActor) return;
+	AMainCharacter* MainCharacter = Cast<AMainCharacter>(OtherActor);
+	if(!MainCharacter) return;
+	MainCharacter->SetOverlappedItem(nullptr);
 	
 }
 
@@ -57,5 +64,12 @@ void AWeapon::Equip(AMainCharacter* Character)
 
 	// Stop rotating weapon
 	bRotate = false;
+
+	// Play equipped sound
+	if(OnEquippedSound)
+		UGameplayStatics::PlaySound2D(GetWorld(), OnEquippedSound);
+
+	if(!bPlayParticlesAfterEquip)
+		IdleParticle->Deactivate();
 	
 }

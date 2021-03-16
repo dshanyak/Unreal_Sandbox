@@ -69,6 +69,8 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &AMainCharacter::SprintKeyPressed);
 	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &AMainCharacter::SprintKeyReleased);
+	PlayerInputComponent->BindAction("LMB", IE_Pressed, this, &AMainCharacter::LMBDown);
+	PlayerInputComponent->BindAction("LMB", IE_Released, this, &AMainCharacter::LMBUp);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMainCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMainCharacter::MoveRight);
@@ -120,6 +122,29 @@ void AMainCharacter::TurnAtRate(float Rate)
 void AMainCharacter::LookUpAtRate(float Rate)
 {
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+}
+
+void AMainCharacter::LMBDown()
+{
+	bLMBDown = true;
+
+	if(ActiveOverlappingItem)
+	{
+		// Cast to weapon
+		AWeapon* Weapon = Cast<AWeapon>(ActiveOverlappingItem);
+		if(!Weapon) return;
+
+		// Equip weapon
+		Weapon->Equip(this);
+
+		// Reset overlapping item
+		SetOverlappedItem(nullptr);
+	}
+}
+
+void AMainCharacter::LMBUp()
+{
+	bLMBDown = false;
 }
 
 void AMainCharacter::DecrementHealth(float Amount)

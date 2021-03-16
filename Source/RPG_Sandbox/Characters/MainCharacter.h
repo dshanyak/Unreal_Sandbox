@@ -7,6 +7,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "RPG_Sandbox/Actors/Items/ItemBase.h"
 #include "RPG_Sandbox/Actors/Items/Weapon.h"
 
 
@@ -48,7 +49,15 @@ public:
 
 	/** Setup equipped weapon */
 	UFUNCTION(BlueprintCallable)
-	void SetEquippedWeapon(AWeapon* WeaponToSet) { EquippedWeapon = WeaponToSet; }
+    void SetEquippedWeapon(AWeapon* WeaponToSet) { EquippedWeapon = WeaponToSet; }
+
+	/** Weapon that could be picked up if player wants */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Items")
+	AItemBase* ActiveOverlappingItem;
+
+	/** Set Overlapped Item */
+	UFUNCTION(BlueprintCallable)
+	void SetOverlappedItem(AItemBase* ItemToSet) { ActiveOverlappingItem = ItemToSet; }
 
 	/** Stamina */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Enums")
@@ -80,7 +89,7 @@ public:
 	/** Set movement and running speed */
 	void SetMovementStatus(EMovementStatus Status);
 
-	/** Is srpint key pressed */
+	/** Is sprint key pressed */
 	bool bSprintKeyDown = false;
 
 	/** Called when sprint key is pressed */
@@ -150,6 +159,11 @@ public:
 	* @Param Rate This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
 	*/
 	void LookUpAtRate(float Rate);
+
+	/** Left mouse button actions */
+	bool bLMBDown = false;
+	void LMBDown();
+	void LMBUp();
 
 	// Getters for components
 	FORCEINLINE USpringArmComponent* GetSpringArmComponent() const {return SpringArmComponent;}

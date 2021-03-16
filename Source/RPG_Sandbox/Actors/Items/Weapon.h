@@ -5,10 +5,10 @@
 #include "CoreMinimal.h"
 
 #include "ItemBase.h"
-#include "RPG_Sandbox/Characters/MainCharacter.h"
 
 #include "Weapon.generated.h"
 
+class AMainCharacter;
 /**
  * 
  */
@@ -17,12 +17,21 @@ class RPG_SANDBOX_API AWeapon : public AItemBase
 {
 	GENERATED_BODY()
 
-public:
-	AWeapon();
-
+protected:
 	/** MeshComponent */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "SkeletalMesh")
 	USkeletalMeshComponent* SkeletalMesh;
+
+	/** Sound to play when equipping the weapon */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Effects")
+	USoundCue* OnEquippedSound;
+
+	/** Determines if weapon should continue running particles after equipping */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Effects")
+	bool bPlayParticlesAfterEquip = false;
+
+public:
+	AWeapon();
 
 	virtual void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
