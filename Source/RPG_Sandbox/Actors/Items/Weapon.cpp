@@ -53,6 +53,7 @@ void AWeapon::Equip(AMainCharacter* Character)
 
 	// Attach weapon
 	RightHandSocket->AttachActor(this, Character->GetMesh());
+	Character->SetEquippedWeapon(this);
 
 	// Stop rotating weapon
 	bRotate = false;
