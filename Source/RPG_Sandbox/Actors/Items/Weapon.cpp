@@ -20,6 +20,9 @@ void AWeapon::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* O
 {
 	Super::OnOverlapBegin(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
 
+	// Dismiss if weapon is equipped
+	if(WeaponState == EWeaponState::EWS_Equipped) return;
+
 	// Set character's overlapping item to this
 	if(!OtherActor) return;
 	AMainCharacter* MainCharacter = Cast<AMainCharacter>(OtherActor);
@@ -54,6 +57,13 @@ void AWeapon::Equip(AMainCharacter* Character)
 	// Stop simulating physics
 	SkeletalMesh->SetSimulatePhysics(false);
 
+	// Remove old weapon
+	AWeapon* OldWeapon = Character->GetEquippedWeapon();
+	if(OldWeapon) OldWeapon->Destroy();
+
+	// Removed this weapon from character's overlap
+	Character->SetOverlappedItem(nullptr);
+
 	// Get Socket to attach to
 	const USkeletalMeshSocket* RightHandSocket = Character->GetMesh()->GetSocketByName("RightHandSocket");
 	if(!RightHandSocket) return;
@@ -69,7 +79,11 @@ void AWeapon::Equip(AMainCharacter* Character)
 	if(OnEquippedSound)
 		UGameplayStatics::PlaySound2D(GetWorld(), OnEquippedSound);
 
+	// Deactivate particles if needed
 	if(!bPlayParticlesAfterEquip)
 		IdleParticle->Deactivate();
+
+	// Set weapon state
+	SetWeaponState(EWeaponState::EWS_Equipped);
 	
 }

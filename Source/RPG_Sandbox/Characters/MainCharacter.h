@@ -51,6 +51,10 @@ public:
 	UFUNCTION(BlueprintCallable)
     void SetEquippedWeapon(AWeapon* WeaponToSet) { EquippedWeapon = WeaponToSet; }
 
+	/** EquippedWeaponGetter */
+	UFUNCTION(BlueprintCallable)
+	AWeapon* GetEquippedWeapon() { return EquippedWeapon; }
+
 	/** Weapon that could be picked up if player wants */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Items")
 	AItemBase* ActiveOverlappingItem;

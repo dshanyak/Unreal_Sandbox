@@ -129,16 +129,10 @@ void AMainCharacter::LMBDown()
 	bLMBDown = true;
 
 	if(ActiveOverlappingItem)
-	{
-		// Cast to weapon
+	{		
+		// If weapon, equip it
 		AWeapon* Weapon = Cast<AWeapon>(ActiveOverlappingItem);
-		if(!Weapon) return;
-
-		// Equip weapon
-		Weapon->Equip(this);
-
-		// Reset overlapping item
-		SetOverlappedItem(nullptr);
+		if(Weapon) Weapon->Equip(this);
 	}
 }
 
