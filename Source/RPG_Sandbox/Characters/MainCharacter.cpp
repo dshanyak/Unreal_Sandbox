@@ -53,7 +53,7 @@ void AMainCharacter::BeginPlay()
 void AMainCharacter::Attack()
 {
 	// Set IsAttacking
-	bAttacking = true;
+	BIsAttacking = true;
 
 	// Get AnimInstance
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
@@ -63,6 +63,11 @@ void AMainCharacter::Attack()
 	if(!CombatMontage) return;
 	AnimInstance->Montage_Play(CombatMontage);
 	AnimInstance->Montage_JumpToSection(FName("AttackOne"), CombatMontage);
+}
+
+void AMainCharacter::EndAttack()
+{
+	BIsAttacking = false;
 }
 
 // Called every frame
@@ -99,7 +104,7 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 void AMainCharacter::MoveForward(float Value)
 {
 	// Ensure controller is not null, and value is not 0
-	if(Controller == nullptr || Value == 0.f) return;
+	if(Controller == nullptr || Value == 0.f || BIsAttacking) return;
 
 	// Get forward position from Controller's yaw
 	const FRotator Rotation = Controller->GetControlRotation();
@@ -116,7 +121,7 @@ void AMainCharacter::MoveForward(float Value)
 void AMainCharacter::MoveRight(float Value)
 {
 	// Ensure controller is not null, and value is not 0
-	if(Controller == nullptr || Value == 0.f) return;
+	if(Controller == nullptr || Value == 0.f || BIsAttacking) return;
 
 	// Get forward position from Controller's yaw
 	const FRotator Rotation = Controller->GetControlRotation();

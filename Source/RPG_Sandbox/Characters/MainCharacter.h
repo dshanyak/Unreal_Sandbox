@@ -118,7 +118,7 @@ public:
 
 	/** If player is attacking */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
-	bool bAttacking;
+	bool BIsAttacking;
 
 	/** Montage for combat animations */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
@@ -152,7 +152,6 @@ protected:
 	/** Called to have character attack */
 	UFUNCTION(BlueprintCallable)
 	void Attack();
-	
 
 public:	
 	// Called every frame
@@ -185,4 +184,8 @@ public:
 	// Getters for components
 	FORCEINLINE USpringArmComponent* GetSpringArmComponent() const {return SpringArmComponent;}
 	FORCEINLINE UCameraComponent* GetCameraComponent() const {return CameraComponent;}
+
+	/** Called to end an attack */
+	UFUNCTION(BlueprintCallable)
+    void EndAttack();
 };
