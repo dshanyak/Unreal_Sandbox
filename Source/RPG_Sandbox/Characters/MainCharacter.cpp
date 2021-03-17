@@ -50,6 +50,21 @@ void AMainCharacter::BeginPlay()
 	
 }
 
+void AMainCharacter::Attack()
+{
+	// Set IsAttacking
+	bAttacking = true;
+
+	// Get AnimInstance
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if(!AnimInstance) return;
+
+	// Play montage
+	if(!CombatMontage) return;
+	AnimInstance->Montage_Play(CombatMontage);
+	AnimInstance->Montage_JumpToSection(FName("AttackOne"), CombatMontage);
+}
+
 // Called every frame
 void AMainCharacter::Tick(float DeltaTime)
 {
@@ -128,12 +143,22 @@ void AMainCharacter::LMBDown()
 {
 	bLMBDown = true;
 
+	// If overlapping an item, interact with it
+	// As of now, only a weapon is available, but other may come later
 	if(ActiveOverlappingItem)
 	{		
 		// If weapon, equip it
 		AWeapon* Weapon = Cast<AWeapon>(ActiveOverlappingItem);
 		if(Weapon) Weapon->Equip(this);
+		return;
 	}
+
+	// If a weapon is equipped, attack
+	if(EquippedWeapon)
+	{
+		Attack();
+	}
+
 }
 
 void AMainCharacter::LMBUp()

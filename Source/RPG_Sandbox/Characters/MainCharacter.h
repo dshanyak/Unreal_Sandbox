@@ -116,6 +116,14 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Camera")
 	float BaseLookUpRate = 65.f;
 
+	/** If player is attacking */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
+	bool bAttacking;
+
+	/** Montage for combat animations */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
+	UAnimMontage* CombatMontage;
+
 	/**
 	 *
 	 * Player Stats
@@ -140,6 +148,11 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	/** Called to have character attack */
+	UFUNCTION(BlueprintCallable)
+	void Attack();
+	
 
 public:	
 	// Called every frame
